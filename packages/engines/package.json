@@ -1,0 +1,10 @@
+{
+  "name": "@odyn/engines",
+  "version": "0.1.0",
+  "description": "Lazy page engines: a registry that loads a heavy module only when its root element is on the page, prefetches at navigation intent, and guards against mounting onto the wrong DOM.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

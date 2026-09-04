@@ -1,0 +1,13 @@
+{
+  "name": "@odyn/lifecycle",
+  "version": "0.1.0",
+  "description": "The two-tier module lifecycle for an Astro site with a client router: globals that init once, pages that mount and tear down, one frame clock, one resize hub.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "gsap": "^3.15.0"
+  }
+}

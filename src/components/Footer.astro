@@ -1,0 +1,14 @@
+---
+import { SITE } from "@/config/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="footer container">
+  <p class="footer__line text-tag u-muted">© {year} {SITE.author}</p>
+</footer>
+
+<style lang="scss">
+  .footer {
+    padding-block: var(--sp-5) var(--s-32);
+  }
+</style>

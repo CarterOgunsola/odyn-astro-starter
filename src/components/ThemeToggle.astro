@@ -1,0 +1,63 @@
+---
+
+---
+
+<theme-toggle class="toggle" role="group" aria-label="Colour theme">
+  <button class="toggle__seg text-control" type="button" data-theme-set="light" aria-pressed="false">
+    <span class="toggle__bg" data-theme-bg aria-hidden="true"></span>
+    <span class="toggle__label">Light</span>
+  </button>
+  <button class="toggle__seg text-control" type="button" data-theme-set="dark" aria-pressed="false">
+    <span class="toggle__label">Dark</span>
+  </button>
+</theme-toggle>
+
+<style lang="scss">
+  .toggle {
+    display: inline-flex;
+    padding: var(--s-2);
+    border-radius: var(--r-pill);
+    background: var(--fill);
+    isolation: isolate;
+  }
+  .toggle__seg {
+    position: relative;
+    min-height: var(--s-28);
+    padding: 0 var(--s-10);
+    border-radius: var(--r-pill);
+    color: var(--ink-muted-on-fill);
+    transition:
+      color 0.2s var(--ease-out-quad),
+      transform 0.16s var(--ease-out-quad);
+    &[aria-pressed="true"] {
+      color: var(--ink);
+    }
+    &:active {
+      transform: scale(0.96);
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc((var(--s-28) - var(--hit)) / 2) 0;
+    }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .toggle__seg:hover {
+      color: var(--ink);
+    }
+  }
+  .toggle__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: var(--surface);
+    box-shadow:
+      0 0 0 1px var(--line),
+      var(--shadow-card);
+  }
+  .toggle__label {
+    position: relative;
+    z-index: 1;
+  }
+</style>

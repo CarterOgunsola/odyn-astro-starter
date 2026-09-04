@@ -1,0 +1,92 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  notes: CollectionEntry<"notes">[];
+}
+
+const { notes } = Astro.props;
+const sorted = [...notes].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const years = new Map<number, CollectionEntry<"notes">[]>();
+for (const n of sorted) {
+  const y = n.data.date.getUTCFullYear();
+  years.set(y, [...(years.get(y) ?? []), n]);
+}
+const fmt = (d: Date) =>
+  d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" }).replace(" ", " ");
+---
+
+{
+  years.size === 0 ? (
+    <p class="notes__empty">
+      No notes yet. The first one goes in <code>src/content/notes/</code>.
+    </p>
+  ) : (
+    <ol class="notes" role="list">
+      {[...years.entries()].map(([year, items]) => (
+        <li class="notes__year">
+          <span class="notes__y text-caption u-tabular">{year}</span>
+          <ol class="notes__rows" role="list">
+            {items.map((n) => (
+              <li class="notes__row">
+                <a class="notes__link" href={`/notes/${n.id}`}>
+                  <span class="notes__date text-caption u-tabular">{fmt(n.data.date)}</span>
+                  <span class="notes__title">{n.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+<style lang="scss">
+  @use "tokens" as tk;
+  .notes {
+    display: grid;
+    gap: 0;
+  }
+  .notes__year {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--s-16);
+    border-top: 1px solid var(--divider);
+    @media (max-width: #{tk.bp(m)}) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+  .notes__y {
+    padding-block: var(--s-16);
+    color: var(--ink-muted);
+  }
+  .notes__rows {
+    display: grid;
+  }
+  .notes__row + .notes__row {
+    border-top: 1px solid var(--line);
+  }
+  .notes__link {
+    display: grid;
+    gap: var(--s-4);
+    padding-block: var(--s-16);
+    color: var(--ink);
+  }
+  .notes__date {
+    color: var(--ink-muted);
+    transition: color 0.3s var(--ease-out-quad);
+  }
+  .notes__title {
+    line-height: var(--lh-tight);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .notes__link:hover .notes__date {
+      color: var(--ink);
+    }
+  }
+  .notes__empty {
+    color: var(--ink-muted);
+  }
+</style>

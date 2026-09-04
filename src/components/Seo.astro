@@ -1,0 +1,85 @@
+---
+import { SITE, SOCIAL_LINKS } from "@/config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  image,
+  type = "website",
+  noindex: noindexProp = false,
+  schema = [],
+} = Astro.props;
+const path = Astro.url.pathname;
+const noindex = noindexProp || SITE.noindex.some((n) => path === n || path === `${n}/`);
+
+const site = Astro.site ?? new URL(SITE.url);
+const canonical = new URL(Astro.url.pathname, site).href;
+const sep = SITE.titleSeparator;
+const pageTitle = title ? `${title}${sep}${SITE.name}` : `${SITE.name}${sep}${SITE.tagline}`;
+const desc = description ?? SITE.description;
+const ogImage = new URL(image ?? SITE.ogImage, site).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      description: SITE.description,
+      inLanguage: SITE.locale,
+      ...(SOCIAL_LINKS.length ? { sameAs: SOCIAL_LINKS } : {}),
+    },
+    ...schema,
+  ],
+};
+---
+
+<title>{pageTitle}</title>
+<meta name="description" content={desc} />
+<meta name="author" content={SITE.author} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={pageTitle} />
+<meta property="og:locale" content={SITE.ogLocale} />
+
+<meta name="twitter:card" content="summary_large_image" />
+{SITE.twitterHandle && <meta name="twitter:site" content={SITE.twitterHandle} />}
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={desc} />
+<meta name="twitter:image" content={ogImage} />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${SITE.name}${sep}${SITE.feed.title}`}
+  href={new URL("/rss.xml", site).href}
+/>
+
+<meta name="theme-color" media="(prefers-color-scheme: light)" content={SITE.themeColor.light} />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content={SITE.themeColor.dark} />
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")} />

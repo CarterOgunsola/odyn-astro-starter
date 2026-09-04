@@ -1,0 +1,128 @@
+---
+import "@/styles/global.scss";
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import Seo from "@/components/Seo.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config/site";
+import { easingCss } from "@/config/easing";
+import Mark from "@/icons/odyn.svg";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+}
+
+const { title, description, image, type, noindex, schema } = Astro.props;
+const themeDefault = SITE.theme;
+---
+
+<!doctype html>
+<html lang={SITE.locale} transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-mono" />
+
+    <style is:inline set:html={easingCss()}></style>
+
+    {/* Re-applied after every swap: the swapped-in html loses the attribute. */}
+    <script is:inline define:vars={{ themeDefault }}>
+      (() => {
+        const apply = () => {
+          let stored = null;
+          try {
+            stored = localStorage.getItem("theme");
+          } catch {}
+          const pick = stored || themeDefault;
+          const dark =
+            pick === "dark"
+              ? true
+              : pick === "light"
+                ? false
+                : matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+        };
+        apply();
+        if (!window.__themeBound) {
+          window.__themeBound = true;
+          document.addEventListener("astro:after-swap", apply);
+        }
+      })();
+    </script>
+
+    <script is:inline>
+      (() => {
+        try {
+          const seen = sessionStorage.getItem("conductor:seen");
+          document.documentElement.setAttribute("data-conductor", seen ? "fast" : "boot");
+          if (!seen) sessionStorage.setItem("conductor:seen", "1");
+        } catch {
+          document.documentElement.setAttribute("data-conductor", "fast");
+        }
+      })();
+    </script>
+    <noscript>
+      <style>
+        .conductor {
+          display: none !important;
+        }
+      </style>
+    </noscript>
+
+    <Seo
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      noindex={noindex}
+      schema={schema}
+    />
+
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip text-tag" href="#main" data-skip>Skip to content</a>
+
+    <Header />
+
+    <slot />
+    <Footer />
+
+    <div class="conductor" data-conductor-panel aria-hidden="true" transition:persist="conductor">
+      <span class="conductor__mark" data-conductor-mark>
+        <Mark width={28} height={28} />
+      </span>
+    </div>
+
+    <script>
+      import "@/app.ts";
+    </script>
+  </body>
+</html>
+
+<style lang="scss">
+  .skip {
+    position: absolute;
+    inset-inline-start: var(--s-16);
+    top: var(--s-16);
+    z-index: var(--z-skip);
+    padding: var(--s-8) var(--s-12);
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 0 0 1px var(--line);
+    transform: translateY(calc(-100% - var(--s-24)));
+    transition: transform 0.2s var(--ease-out-quad);
+    &:focus-visible {
+      transform: none;
+    }
+  }
+</style>

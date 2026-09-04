@@ -1,0 +1,17 @@
+{
+  "name": "@odyn/reveal",
+  "version": "0.1.0",
+  "description": "Markup-driven entrances on the conductor's clock: z-y masked rise, z-s split lines, z-o fade, z-x line draw, with a resize-safe line splitter.",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@odyn/conductor": "workspace:*",
+    "@odyn/lifecycle": "workspace:*"
+  },
+  "peerDependencies": {
+    "gsap": "^3.15.0"
+  }
+}

@@ -1,0 +1,95 @@
+@use "type" as t;
+
+body {
+  @include t.text(body);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+h1 {
+  @include t.text(h1);
+}
+h2 {
+  @include t.text(h2);
+}
+h3 {
+  @include t.text(h3);
+}
+h4 {
+  @include t.text(h4);
+}
+
+a:where(:not([class])) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  text-decoration-color: var(--ink-muted);
+  transition: text-decoration-color 0.3s var(--ease-out-quad);
+}
+@media (hover: hover) and (pointer: fine) {
+  a:where(:not([class])):hover {
+    text-decoration-color: var(--ink);
+  }
+}
+
+button,
+[role="button"] {
+  transition: transform 0.16s var(--ease-out-quad);
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+a.cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hit);
+}
+
+time,
+dd {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
+}
+main:focus:not(:focus-visible),
+h1:focus:not(:focus-visible),
+h2:focus:not(:focus-visible) {
+  outline: none;
+}
+// The heading inside carries the focus cue.
+main:focus-visible {
+  outline: none;
+}
+
+code,
+kbd {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--ink);
+
+  background: var(--code-bg);
+  padding: 0.1em 0.25em;
+  border-radius: var(--r-sm);
+}
+
+pre {
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  padding: var(--s-16);
+  border-radius: var(--r-lg);
+  overflow-x: auto;
+  code {
+    background: none;
+    padding: 0;
+  }
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--divider);
+}

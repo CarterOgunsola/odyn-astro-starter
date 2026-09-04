@@ -1,0 +1,41 @@
+.conductor {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-curtain);
+  background: var(--paper);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.conductor__mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+
+html[data-conductor="boot"] .conductor,
+html[data-conductor="fast"] .conductor {
+  visibility: visible;
+  pointer-events: auto;
+  // Failsafe if JS never runs. The conductor cancels it with .is-js.
+  animation: conductor-failsafe 0.5s var(--ease-out-quad) 4s forwards;
+}
+.conductor.is-js {
+  animation: none;
+}
+@keyframes conductor-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+a.is-navving-from {
+  color: var(--ink);
+}
+
+html [data-header].is-conductor-nav {
+  z-index: var(--z-chrome-lift);
+}

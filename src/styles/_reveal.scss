@@ -1,0 +1,19 @@
+.y_ {
+  display: block;
+  overflow: hidden;
+  margin-inline: -1px;
+  padding-inline: 1px;
+  margin-block: -0.04em -0.08em;
+  padding-block: 0.04em 0.08em;
+}
+
+@media print {
+  main [class*="z-"],
+  .y {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+.y {
+  display: block;
+}

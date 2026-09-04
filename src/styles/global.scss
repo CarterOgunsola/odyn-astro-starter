@@ -1,0 +1,44 @@
+@use "scale";
+@use "color";
+@use "radius";
+@use "tokens";
+@use "reset";
+@use "type";
+@use "layout";
+@use "elements";
+@use "utilities";
+@use "reveal";
+@use "conductor";
+
+@include type.sizes;
+@include type.utilities(
+  ("display", "h1", "h2", "h3", "lead", "body", "body-sm", "caption", "nav", "tag", "eyebrow", "control")
+);
+@include layout.vars;
+@include layout.utilities;
+
+// clip, not hidden: no scroll container, so sticky and the scroll engine keep working.
+html,
+body {
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--spot-wash);
+  color: var(--ink);
+}
+:root {
+  accent-color: var(--spot);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    // Zero, not short: a short one leaves computed styles stale for a frame.
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

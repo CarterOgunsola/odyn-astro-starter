@@ -1,0 +1,64 @@
+@use "fluid" as f;
+
+@mixin vars {
+  :root {
+    --container-max: 90rem;
+    --measure: 42rem;
+    --measure-wide: 44rem;
+    --gutter: #{f.fluid(16, 30)};
+    --margin: #{f.fluid(16, 30)};
+    --columns: 12;
+  }
+}
+
+@mixin container {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--margin), 1fr)
+    [content-start] min(100% - var(--margin) * 2, var(--container-max)) [content-end]
+    minmax(var(--margin), 1fr) [full-end];
+  > * {
+    grid-column: content;
+  }
+}
+
+@mixin bleed($side: full) {
+  @if $side == left {
+    grid-column: full-start / content-end;
+  } @else if $side == right {
+    grid-column: content-start / full-end;
+  } @else {
+    grid-column: full;
+  }
+}
+
+@mixin grid($cols: var(--columns)) {
+  display: grid;
+  grid-template-columns: repeat($cols, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+@mixin prose {
+  max-inline-size: var(--measure);
+}
+
+@mixin utilities {
+  .container {
+    @include container;
+  }
+  .grid {
+    @include grid;
+  }
+  .bleed-full {
+    @include bleed(full);
+  }
+  .bleed-left {
+    @include bleed(left);
+  }
+  .bleed-right {
+    @include bleed(right);
+  }
+  .measure {
+    @include prose;
+  }
+}

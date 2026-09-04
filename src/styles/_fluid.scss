@@ -1,0 +1,45 @@
+@use "sass:math";
+@use "sass:meta";
+
+$fluid-min-vw: 375 !default;
+$fluid-max-vw: 1440 !default;
+$root-font-size: 16 !default;
+
+@function _round($number, $digits: 4) {
+  $factor: math.pow(10, $digits);
+  @return math.div(math.round($number * $factor), $factor);
+}
+
+@function _strip($value) {
+  @if meta.type-of($value) == "number" and not math.is-unitless($value) {
+    @return math.div($value, ($value * 0 + 1));
+  }
+  @return $value;
+}
+
+@function rem($px) {
+  @return _round(math.div(_strip($px), $root-font-size)) * 1rem;
+}
+
+@function fluid($min-px, $max-px, $min-vw: $fluid-min-vw, $max-vw: $fluid-max-vw) {
+  $min-px: _strip($min-px);
+  $max-px: _strip($max-px);
+  $min-vw: _strip($min-vw);
+  $max-vw: _strip($max-vw);
+  @if $min-vw == $max-vw {
+    @error "fluid(): $min-vw and $max-vw cannot be equal (#{$min-vw}).";
+  }
+  @if $min-px == $max-px {
+    @return rem($min-px);
+  }
+  $slope: math.div($max-px - $min-px, $max-vw - $min-vw);
+  $intercept: rem($min-px - $slope * $min-vw);
+  $preferred: _round($slope * 100) * 1vw;
+  $lower: rem($min-px);
+  $upper: rem($max-px);
+  @if $max-px < $min-px {
+    $lower: rem($max-px);
+    $upper: rem($min-px);
+  }
+  @return clamp(#{$lower}, #{$intercept} + #{$preferred}, #{$upper});
+}

@@ -1,0 +1,17 @@
+@use "fluid" as f;
+@use "sass:list";
+
+$scale: 0 2 4 6 8 10 12 14 16 18 20 24 28 30 32 36 40 48 56 64 80 96 112 128 144 160 !default;
+
+:root {
+  @each $step in $scale {
+    --s-#{$step}: #{f.rem($step)};
+  }
+}
+
+@function size($step) {
+  @if not list.index($scale, $step) {
+    @error "size(): `#{$step}` is not in $scale. Valid steps: #{$scale}.";
+  }
+  @return var(--s-#{$step});
+}

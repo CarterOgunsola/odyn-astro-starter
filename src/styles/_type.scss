@@ -1,0 +1,188 @@
+@use "fluid" as f;
+@use "sass:map";
+
+@mixin sizes {
+  :root {
+    --fs-mega: #{f.fluid(64, 160)};
+    --fs-display: #{f.fluid(48, 96)};
+    --fs-h1: #{f.fluid(36, 64)};
+    --fs-h2: #{f.fluid(30, 48)};
+    --fs-h3: #{f.fluid(26, 40)};
+    --fs-h4: #{f.fluid(24, 32)};
+    --fs-h5: #{f.fluid(20, 24)};
+    --fs-h6: #{f.fluid(18, 20)};
+    --fs-lead: #{f.fluid(18, 20)};
+    --fs-body: #{f.fluid(16, 18)};
+    --fs-body-sm: #{f.rem(16)};
+    --fs-caption: #{f.rem(14)};
+    --fs-nav: #{f.rem(16)};
+    --fs-tag: #{f.rem(14)};
+    --fs-eyebrow: #{f.rem(12)};
+    --fs-control: #{f.rem(13)};
+    --fs-mono-label: #{f.rem(14)};
+    --fs-mono-meta: #{f.rem(12)};
+    --fs-mono-sm: #{f.rem(10)};
+  }
+}
+
+$roles: (
+  "mega": (
+    font: var(--font-sans),
+    size: var(--fs-mega),
+    weight: var(--fw-regular),
+    lh: var(--lh-display),
+    track: var(--track-display),
+  ),
+  "display": (
+    font: var(--font-sans),
+    size: var(--fs-display),
+    weight: var(--fw-regular),
+    lh: var(--lh-display),
+    track: var(--track-display),
+  ),
+  "h1": (
+    font: var(--font-sans),
+    size: var(--fs-h1),
+    weight: var(--fw-regular),
+    lh: var(--lh-display),
+    track: var(--track-display),
+  ),
+  "h2": (
+    font: var(--font-sans),
+    size: var(--fs-h2),
+    weight: var(--fw-medium),
+    lh: var(--lh-heading),
+    track: var(--track-heading),
+  ),
+  "h3": (
+    font: var(--font-sans),
+    size: var(--fs-h3),
+    weight: var(--fw-medium),
+    lh: var(--lh-heading),
+    track: var(--track-heading),
+  ),
+  "h4": (
+    font: var(--font-sans),
+    size: var(--fs-h4),
+    weight: var(--fw-medium),
+    lh: var(--lh-heading),
+    track: var(--track-heading),
+  ),
+  "h5": (
+    font: var(--font-sans),
+    size: var(--fs-h5),
+    weight: var(--fw-medium),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "h6": (
+    font: var(--font-sans),
+    size: var(--fs-h6),
+    weight: var(--fw-medium),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "lead": (
+    font: var(--font-sans),
+    size: var(--fs-lead),
+    weight: var(--fw-regular),
+    lh: var(--lh-body),
+    track: var(--track),
+  ),
+  "body": (
+    font: var(--font-sans),
+    size: var(--fs-body),
+    weight: var(--fw-regular),
+    lh: var(--lh-body),
+    track: var(--track),
+  ),
+  "body-sm": (
+    font: var(--font-sans),
+    size: var(--fs-body-sm),
+    weight: var(--fw-regular),
+    lh: var(--lh-body),
+    track: var(--track),
+  ),
+  "caption": (
+    font: var(--font-sans),
+    size: var(--fs-caption),
+    weight: var(--fw-regular),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "nav": (
+    font: var(--font-sans),
+    size: var(--fs-nav),
+    weight: var(--fw-regular),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "tag": (
+    font: var(--font-sans),
+    size: var(--fs-tag),
+    weight: var(--fw-regular),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "control": (
+    font: var(--font-sans),
+    size: var(--fs-control),
+    weight: var(--fw-medium),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "eyebrow": (
+    font: var(--font-sans),
+    size: var(--fs-eyebrow),
+    weight: var(--fw-medium),
+    lh: var(--lh-tight),
+    track: var(--track-print),
+    transform: uppercase,
+  ),
+  "mono-label": (
+    font: var(--font-mono),
+    size: var(--fs-mono-label),
+    weight: var(--fw-medium),
+    lh: var(--lh-tight),
+    track: var(--track-print),
+    transform: uppercase,
+  ),
+  "mono-meta": (
+    font: var(--font-mono),
+    size: var(--fs-mono-meta),
+    weight: var(--fw-regular),
+    lh: var(--lh-tight),
+    track: var(--track),
+  ),
+  "mono-sm": (
+    font: var(--font-mono),
+    size: var(--fs-mono-sm),
+    weight: var(--fw-medium),
+    lh: var(--lh-tight),
+    track: var(--track-print),
+    transform: uppercase,
+  ),
+);
+
+@mixin text($role) {
+  $r: map.get($roles, $role);
+  @if not $r {
+    @error "text(): unknown role `#{$role}`. Valid roles: #{map.keys($roles)}.";
+  }
+  font-family: map.get($r, font);
+  font-size: map.get($r, size);
+  font-weight: map.get($r, weight);
+  line-height: map.get($r, lh);
+  letter-spacing: map.get($r, track);
+  @if map.has-key($r, transform) {
+    text-transform: map.get($r, transform);
+  }
+}
+
+@mixin utilities($used) {
+  @each $name in $used {
+    .text-#{$name} {
+      @include text($name);
+    }
+  }
+}

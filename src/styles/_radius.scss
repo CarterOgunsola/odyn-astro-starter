@@ -1,0 +1,13 @@
+@use "fluid" as f;
+@use "scale" as s;
+
+:root {
+  --r-xs: #{s.size(2)};
+  --r-sm: #{s.size(4)};
+  --r-md: #{s.size(6)};
+  --r-lg: #{s.size(8)};
+  --r-xl: #{s.size(12)};
+  --r-2xl: #{s.size(16)};
+  --r-pill: 999px;
+  --r-full: 50%;
+}

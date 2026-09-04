@@ -1,0 +1,57 @@
+:root {
+  --mono-100: #f2f2f2;
+  --mono-500: #6b6b6b;
+  --mono-900: #161616;
+  --white: #fff;
+}
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --paper: #f2f2f1;
+  --surface: #fbfbfa;
+  --card: color-mix(in srgb, var(--mono-900) 5%, var(--paper));
+  --ink: var(--mono-900);
+  --ink-muted: rgba(22, 22, 22, 0.74);
+  --fill: rgba(22, 22, 22, 0.08);
+  --fill-strong: rgba(22, 22, 22, 0.2);
+  --line: rgba(22, 22, 22, 0.08);
+  --divider: rgba(22, 22, 22, 0.2);
+  --scrim: rgba(22, 22, 22, 0.4);
+  --code-bg: #e9e9e6;
+  --shadow-card: 0 10px 26px -16px rgba(22, 22, 22, 0.18);
+  --shadow-modal: 0 24px 60px -24px rgba(22, 22, 22, 0.25);
+  --btn-fill: rgba(22, 22, 22, 0.92);
+  --btn-on: var(--mono-100);
+  --spot: #1f3f8f;
+  --spot-rgb: 31, 63, 143;
+  --spot-wash: rgba(var(--spot-rgb), 0.14);
+  --ring: var(--ink);
+  --media-edge: rgba(0, 0, 0, 0.1);
+  --ink-muted-on-fill: rgba(22, 22, 22, 0.8);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #141414;
+  --surface: #1e1e1e;
+  --card: color-mix(in srgb, var(--mono-100) 6%, var(--paper));
+  --ink: var(--mono-100);
+  --ink-muted: rgba(242, 242, 242, 0.64);
+  --fill: rgba(242, 242, 242, 0.08);
+  --fill-strong: rgba(242, 242, 242, 0.2);
+  --line: rgba(242, 242, 242, 0.08);
+  --divider: rgba(242, 242, 242, 0.2);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --code-bg: #262626;
+  --shadow-card: 0 12px 30px -18px rgba(0, 0, 0, 0.55);
+  --shadow-modal: 0 24px 70px -20px rgba(0, 0, 0, 0.7);
+  --btn-fill: rgba(242, 242, 242, 0.92);
+  --btn-on: var(--mono-900);
+  --spot: #8fa6e6;
+  --spot-rgb: 143, 166, 230;
+  --spot-wash: rgba(var(--spot-rgb), 0.24);
+  --ring: var(--ink);
+  --media-edge: rgba(255, 255, 255, 0.1);
+  --ink-muted-on-fill: rgba(242, 242, 242, 0.72);
+}

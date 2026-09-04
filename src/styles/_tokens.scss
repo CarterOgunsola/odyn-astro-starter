@@ -1,0 +1,46 @@
+@use "sass:map";
+
+$bp: (
+  s: 32em,
+  m: 40em,
+  l: 56em,
+);
+
+@function bp($step) {
+  @if not map.has-key($bp, $step) {
+    @error "bp(): `#{$step}` is not a breakpoint. Valid steps: #{map.keys($bp)}.";
+  }
+  @return map.get($bp, $step);
+}
+
+:root {
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  --lh-display: 0.98;
+  --lh-heading: 1.06;
+  --lh-tight: 1.1;
+  --lh-body: 1.45;
+
+  --track-display: -0.042em;
+  --track-heading: -0.028em;
+  --track: -0.02em;
+  --track-print: 0.08em;
+
+  --lh-prose: 1.5;
+  --track-prose: -0.01em;
+
+  --hit: var(--s-40);
+
+  --z-header: 900;
+  --z-curtain: 1200;
+  --z-chrome-lift: 1300;
+  --z-skip: 1400;
+
+  --sp-1: var(--s-8);
+  --sp-2: var(--s-16);
+  --sp-3: var(--s-24);
+  --sp-4: var(--s-48);
+  --sp-5: var(--s-96);
+}

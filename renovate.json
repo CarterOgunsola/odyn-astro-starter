@@ -2,30 +2,23 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices", ":pinAllExceptPeerDependencies"],
   "minimumReleaseAge": "7 days",
-  "lockFileMaintenance": { "enabled": true, "schedule": ["before 6am on monday"] },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
+  "automerge": false,
   "packageRules": [
     {
-      "description": "Patch and minor updates merge on their own once CI is green.",
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true
-    },
-    {
-      "description": "A 0.x package treats a minor as a major: no automerge.",
-      "matchCurrentVersion": "/^0\\./",
-      "matchUpdateTypes": ["minor"],
-      "automerge": false
-    },
-    {
-      "description": "Astro majors get a migration note (docs/migrations) before they merge.",
+      "description": "Astro majors get a migration note (docs/migrations) before a pull request opens.",
       "matchPackageNames": ["astro"],
       "matchUpdateTypes": ["major"],
-      "automerge": false
+      "dependencyDashboardApproval": true
     },
     {
       "description": "The TypeScript major waits for the checker's peer range (decision 011).",
       "matchPackageNames": ["typescript"],
       "matchUpdateTypes": ["major"],
-      "automerge": false
+      "dependencyDashboardApproval": true
     }
   ]
 }

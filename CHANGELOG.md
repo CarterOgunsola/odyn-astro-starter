@@ -10,6 +10,10 @@ No long-term support branches. A project on an older tag reads `docs/migrations/
 
 ## [Unreleased]
 
+### Changed
+
+- Renovate opens pull requests only. Nothing automerges; each update is landed by hand. Astro and TypeScript majors wait for dashboard approval.
+
 ## [1.0.0] - 2026-09-04
 
 ### Fixed

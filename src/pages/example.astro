@@ -1,0 +1,214 @@
+---
+import Base from "@/layouts/Base.astro";
+import NoteList from "@/components/NoteList.astro";
+import { getCollection } from "astro:content";
+
+const notes = (await getCollection("notes")).filter((n) => !n.data.draft);
+
+const instruments = [
+  ["Shift + G", "cycles the grid overlay, development only"],
+  ["?debug=conductor", "prints the transition readout on the page"],
+  ["?perf", "logs frame timing and long tasks to the console, development only"],
+  ["?tune=example", "puts this page's engine on dials, development only"],
+  ["/api/health", "the Worker. Run bun run dev:worker alongside dev"],
+];
+---
+
+<Base title="Example" description="Every chassis primitive, on one disposable page." noindex>
+  <main class="ex container" id="main" tabindex="-1">
+    <header class="ex__head">
+      <h1 class="ex__title z-y">Every primitive, once</h1>
+      <p class="ex__lead text-lead z-s-2">
+        The starter's proof and its manual. Noindex, out of the sitemap, meant to be deleted in one commit.
+      </p>
+    </header>
+
+    <section class="ex__section">
+      <h2 class="ex__label text-caption">Entrances</h2>
+      <div class="ex__content">
+        <p class="z-s">
+          Entrances are classes on markup, nothing else. <code>z-y</code> is a masked rise, <code>z-s</code>
+          splits into lines that each rise in their own mask, <code>z-o</code> fades, <code>z-x</code> draws a rule.
+          Suffixes add delay in hundreds of milliseconds. Above the fold they ride the conductor's reveal timeline.
+          Below it they wait for their own intersection. Nothing is hidden in shipped markup.
+        </p>
+        <p class="ex__fixture z-s" data-split-fixture>
+          Non&nbsp;breaking pairs stay together, padded boxes measure their content box, and <a href="/notes"
+            >a very long inline link that is wider than this narrow column</a
+          > wraps by word instead of hiding a second line inside one mask.
+        </p>
+        <hr class="ex__rule z-x-2" />
+      </div>
+    </section>
+
+    <section class="ex__section">
+      <h2 class="ex__label text-caption">A lazy engine</h2>
+      <div class="ex__content">
+        <p>
+          The ribbon is drawn by <code>src/lib/example-engine.ts</code>, loaded only on this page because this
+          page carries its root. It registers a readiness hold so the curtain waits for it, draws on the one
+          frame clock, and arrives on the reveal event.
+        </p>
+        <div class="ex__engine" data-example-engine role="img" aria-label="Example engine canvas"></div>
+      </div>
+    </section>
+
+    <section class="ex__section">
+      <h2 class="ex__label text-caption">Content</h2>
+      <div class="ex__content">
+        <p>
+          One sample collection, read here, at <a href="/notes">/notes</a>, and in <a href="/rss.xml"
+            >the feed</a
+          >. Markdown goes through Sätteri with no plugins.
+        </p>
+        <NoteList notes={notes} />
+        <p>
+          A critical image is one the reveal should not land ahead of. Mark it <code>data-critical</code> and the
+          media hold keeps the curtain up until it is decoded, capped so a slow image never stalls the page.
+        </p>
+        <img
+          class="ex__plate"
+          src="/example-plate.svg"
+          width="640"
+          height="280"
+          alt="A plate: a grid with a circle at its centre, the image the curtain waits for"
+          data-critical
+        />
+      </div>
+    </section>
+
+    <section class="ex__section">
+      <h2 class="ex__label text-caption">Instruments</h2>
+      <dl class="ex__content ex__instruments">
+        {
+          instruments.map(([k, v]) => (
+            <div class="ex__instrument">
+              <dt>
+                <code>{k}</code>
+              </dt>
+              <dd class="text-body-sm">{v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="ex__section">
+      <h2 class="ex__label text-caption">Type</h2>
+      <div class="ex__content ex__type">
+        <p class="text-display">Display</p>
+        <p class="text-h1">Heading one</p>
+        <p class="text-h2">Heading two</p>
+        <p class="text-h3">Heading three</p>
+        <p class="text-lead">
+          Lead. The ladders deepen with size. Leading tightens and tracking closes as type grows.
+        </p>
+        <p class="text-body">Body. The measure holds at 42rem, with pretty wrapping and relaxed leading.</p>
+        <p class="text-caption u-muted">Caption, muted.</p>
+        <p class="text-caption u-muted">
+          Mono is for code and literal values, like <code>bun run validate</code> and <code>v0.1.0</code>.
+          Never for labels.
+        </p>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style lang="scss">
+  @use "tokens" as tk;
+  @use "type" as t;
+
+  .ex {
+    padding-block: var(--sp-4) var(--sp-5);
+    row-gap: var(--sp-4);
+  }
+  .ex__head {
+    display: grid;
+    gap: var(--s-16);
+    max-inline-size: var(--measure);
+  }
+  .ex__title {
+    @include t.text(h1);
+  }
+  .ex__lead {
+    color: var(--ink-muted);
+  }
+
+  .ex__section {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 1fr);
+    gap: var(--s-16) var(--gutter);
+    padding-block-start: var(--sp-3);
+    border-top: 1px solid var(--divider);
+    @media (max-width: #{tk.bp(l)}) {
+      grid-template-columns: 1fr;
+    }
+  }
+  .ex__label {
+    color: var(--ink-muted);
+    padding-block-start: 0.35em;
+  }
+  .ex__content {
+    display: grid;
+    gap: var(--sp-2);
+    max-inline-size: var(--measure-wide);
+    p {
+      max-inline-size: var(--measure);
+    }
+  }
+  .ex__content p.ex__fixture {
+    max-inline-size: 18rem;
+    padding-inline: var(--s-24);
+    border-inline-start: 1px solid var(--line);
+    color: var(--ink-muted);
+  }
+  .ex__rule {
+    border-top: 1px solid var(--ink);
+  }
+  .ex__engine {
+    aspect-ratio: 16 / 7;
+    padding: 1px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--r-lg) + 1px);
+    color: var(--ink);
+    overflow: hidden;
+    canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--r-lg);
+    }
+  }
+  .ex__plate {
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--r-lg);
+    outline: 1px solid var(--media-edge);
+    outline-offset: -1px;
+  }
+  .ex__instruments {
+    gap: 0;
+  }
+  .ex__instrument {
+    display: grid;
+    grid-template-columns: minmax(10rem, 14rem) minmax(0, 1fr);
+    gap: var(--s-16);
+    padding-block: var(--s-12);
+    border-bottom: 1px solid var(--line);
+    &:first-child {
+      border-top: 1px solid var(--line);
+    }
+    dd {
+      color: var(--ink-muted);
+    }
+    @media (max-width: #{tk.bp(m)}) {
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+    }
+  }
+  .ex__type {
+    gap: var(--s-20);
+    p {
+      max-inline-size: 30ch;
+    }
+  }
+</style>

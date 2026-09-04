@@ -1,0 +1,189 @@
+---
+import Base from "@/layouts/Base.astro";
+import { SITE } from "@/config/site";
+import pkg from "@root/package.json";
+
+const external = [
+  ...Object.keys(pkg.dependencies).filter((d) => !d.startsWith("@odyn/")),
+  ...Object.keys(pkg.devDependencies),
+].length;
+const astro = pkg.dependencies.astro;
+
+const facts = [
+  ["Version", `v${pkg.version}`],
+  ["Astro", astro],
+  ["Dependencies", `${external} external`],
+  ["Deploy", "Cloudflare Workers"],
+];
+
+const chassis = [
+  ["Conductor", "Page transitions with guards, readiness holds, one reveal clock and a plain wipe."],
+  ["Lifecycle", "Globals that init once, pages that mount and tear down, one frame clock, one resize hub."],
+  ["Engines", "Heavy modules load only on the page that carries their root, prefetched at intent."],
+  ["Reveal", "Entrances declared as classes on markup, riding the conductor's clock."],
+  ["Foundations", "Tokens, a size scale, fluid clamps, type ladders, a monochrome palette with one spot."],
+  ["Instruments", "A grid overlay, a tune panel and a perf probe, stripped from production."],
+];
+---
+
+<Base>
+  <main class="home container" id="main" tabindex="-1">
+    <section class="hero">
+      <h1 class="hero__title z-s">{SITE.tagline}.</h1>
+      <div class="hero__text">
+        <p class="hero__lead text-lead z-s-3">
+          The code I keep from every project, and nothing else. A fresh clone builds green with no account.
+          The example route shows every primitive, then gets deleted.
+        </p>
+        <p class="hero__cta z-o-7"><a class="cta" href="/example">See the example</a></p>
+      </div>
+      <div class="hero__facts">
+        <hr class="hero__rule z-x-4" />
+        <dl class="hero__list">
+          {
+            facts.map(([k, v], i) => (
+              <div class={`hero__fact z-o-${5 + i}`}>
+                <dt class="text-caption">{k}</dt>
+                <dd class="text-caption u-tabular">{v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="chassis" aria-labelledby="chassis-title">
+      <h2 id="chassis-title" class="chassis__title text-caption z-o">In the chassis</h2>
+      <hr class="chassis__rule z-x-1" />
+      <dl class="chassis__grid">
+        {
+          chassis.map(([name, line], i) => (
+            <div class="chassis__item">
+              <dt class={`chassis__name z-y-${1 + i}`}>{name}</dt>
+              <dd class={`chassis__line text-body-sm z-o-${2 + i}`}>{line}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+  </main>
+</Base>
+
+<style lang="scss">
+  @use "tokens" as tk;
+  @use "type" as t;
+
+  .home {
+    padding-block: var(--sp-5) var(--sp-5);
+    row-gap: var(--sp-5);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem);
+    grid-template-areas:
+      "title title"
+      "text facts";
+    gap: var(--sp-3) var(--gutter);
+    align-items: start;
+    align-content: end;
+    min-height: 52svh;
+    @media (max-width: #{tk.bp(l)}) {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "title"
+        "text"
+        "facts";
+      min-height: 0;
+    }
+  }
+  .hero__title {
+    grid-area: title;
+  }
+  .hero__text {
+    grid-area: text;
+    display: grid;
+    gap: var(--sp-2);
+    align-self: start;
+  }
+  .hero__facts {
+    grid-area: facts;
+  }
+  .hero__title {
+    @include t.text(display);
+    max-inline-size: 13ch;
+  }
+  .hero__lead {
+    color: var(--ink-muted);
+    max-inline-size: var(--measure);
+  }
+  .hero__cta a {
+    color: var(--ink);
+  }
+  .hero__facts {
+    display: grid;
+  }
+  .hero__rule,
+  .chassis__rule {
+    border: 0;
+    border-top: 1px solid var(--divider);
+    margin: 0;
+  }
+  .hero__list {
+    display: grid;
+  }
+  .hero__fact:first-child {
+    padding-block-start: var(--s-8);
+  }
+  .hero__fact {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-16);
+    padding-block: var(--s-10);
+    border-bottom: 1px solid var(--line);
+    dt {
+      color: var(--ink-muted);
+    }
+    dd {
+      color: var(--ink);
+    }
+  }
+
+  .chassis {
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .chassis {
+    row-gap: var(--s-12);
+  }
+  .chassis__title {
+    color: var(--ink-muted);
+  }
+  .chassis__rule {
+    margin-block-end: var(--s-24);
+  }
+  .chassis__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-4) var(--gutter);
+    @media (max-width: #{tk.bp(l)}) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: #{tk.bp(m)}) {
+      grid-template-columns: 1fr;
+      gap: var(--sp-3);
+    }
+  }
+  .chassis__item {
+    display: grid;
+    gap: var(--s-8);
+    align-content: start;
+  }
+  .chassis__name {
+    @include t.text(h6);
+  }
+  .chassis__line {
+    color: var(--ink-muted);
+    max-inline-size: 34ch;
+  }
+</style>

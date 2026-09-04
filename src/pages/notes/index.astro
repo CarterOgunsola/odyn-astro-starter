@@ -1,0 +1,44 @@
+---
+import Base from "@/layouts/Base.astro";
+import NoteList from "@/components/NoteList.astro";
+import { getCollection } from "astro:content";
+import { SITE } from "@/config/site";
+
+const notes = (await getCollection("notes")).filter((n) => !n.data.draft);
+---
+
+<Base title={SITE.feed.title} description={SITE.feed.description}>
+  <main class="notes container" id="main" tabindex="-1">
+    <header class="notes__head">
+      <h1 class="z-y">{SITE.feed.title}</h1>
+      <p class="notes__desc z-o-2">{SITE.feed.description} <a class="cta" href="/rss.xml">Feed</a></p>
+    </header>
+    <div class="notes__list z-o-3">
+      <NoteList notes={notes} />
+    </div>
+  </main>
+</Base>
+
+<style lang="scss">
+  @use "type" as t;
+  .notes {
+    padding-block: var(--sp-4) var(--sp-5);
+    row-gap: var(--sp-4);
+  }
+  .notes__head {
+    display: grid;
+    gap: var(--s-12);
+    h1 {
+      @include t.text(h2);
+    }
+  }
+  .notes__desc {
+    color: var(--ink-muted);
+    a {
+      color: var(--ink);
+    }
+  }
+  .notes__list {
+    max-inline-size: var(--measure-wide);
+  }
+</style>

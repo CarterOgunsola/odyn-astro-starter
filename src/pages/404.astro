@@ -1,0 +1,19 @@
+---
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Not found" noindex>
+  <main class="nf container" id="main" tabindex="-1">
+    <p class="text-eyebrow u-muted">404</p>
+    <h1 class="z-y">Nothing at this address</h1>
+    <p class="z-o-2"><a class="cta" href="/">Back to the start</a></p>
+  </main>
+</Base>
+
+<style lang="scss">
+  .nf {
+    min-height: 70svh;
+    align-content: center;
+    row-gap: var(--sp-2);
+  }
+</style>

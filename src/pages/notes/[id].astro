@@ -1,0 +1,103 @@
+---
+import Base from "@/layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const notes = await getCollection("notes");
+  return notes.filter((n) => !n.data.draft).map((n) => ({ params: { id: n.id }, props: { note: n } }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const date = note.data.date.toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+---
+
+<Base title={note.data.title} description={note.data.description} type="article">
+  <main class="note container" id="main" tabindex="-1">
+    <article class="note__body">
+      <header class="note__head">
+        <p class="note__meta text-caption u-tabular z-o">
+          <a href="/notes">Notes</a> :: <time datetime={note.data.date.toISOString()}>{date}</time>
+        </p>
+        <h1 class="note__title z-y-1">{note.data.title}</h1>
+        <p class="note__desc text-lead z-s-2">{note.data.description}</p>
+      </header>
+      <div class="note__prose z-o-3">
+        <Content />
+      </div>
+    </article>
+  </main>
+</Base>
+
+<style lang="scss">
+  @use "type" as t;
+  .note {
+    padding-block: var(--sp-4) var(--sp-5);
+  }
+  .note__body {
+    max-inline-size: var(--measure);
+    display: grid;
+    gap: var(--sp-4);
+  }
+  .note__head {
+    display: grid;
+    gap: var(--s-16);
+  }
+  .note__meta {
+    color: var(--ink-muted);
+    a {
+      color: var(--ink-muted);
+      transition: color 0.3s var(--ease-out-quad);
+      &:hover {
+        color: var(--ink);
+      }
+    }
+  }
+  .note__title {
+    @include t.text(h2);
+  }
+  .note__desc {
+    color: var(--ink-muted);
+  }
+  .note__prose {
+    --wline: calc(var(--fs-body) * var(--lh-prose));
+    line-height: var(--lh-prose);
+    letter-spacing: var(--track-prose);
+    :global(> * + *) {
+      margin-block-start: var(--wline);
+    }
+    :global(h2) {
+      @include t.text(h4);
+      margin-block-start: calc(var(--wline) * 1.5);
+    }
+    :global(h3) {
+      @include t.text(h5);
+    }
+    :global(a) {
+      color: var(--ink);
+    }
+    :global(ul),
+    :global(ol) {
+      padding-inline-start: 1.2em;
+      list-style: disc;
+    }
+    :global(ol) {
+      list-style: decimal;
+    }
+    :global(blockquote) {
+      padding-inline-start: var(--s-16);
+      border-inline-start: 1px solid var(--divider);
+      color: var(--ink-muted);
+    }
+    :global(img) {
+      border-radius: var(--r-md);
+      outline: 1px solid var(--media-edge);
+      outline-offset: -1px;
+    }
+  }
+</style>

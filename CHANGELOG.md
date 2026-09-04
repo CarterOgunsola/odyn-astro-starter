@@ -10,6 +10,8 @@ No long-term support branches. A project on an older tag reads `docs/migrations/
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-04
+
 ### Fixed
 
 - Watchdogs re-arm on every hold and every drain iteration, so a slow engine chunk can no longer have the curtain torn off it at six seconds.

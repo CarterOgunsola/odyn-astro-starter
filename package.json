@@ -1,6 +1,6 @@
 {
   "name": "odyn-astro-starter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "A personal Astro starter for experiential sites: vanilla TypeScript, SCSS, GSAP, a transition conductor, lazy engines, and a Cloudflare Worker deploy. Born from Astro minimal.",
@@ -61,8 +61,8 @@
   "starter": {
     "name": "odyn-astro-starter",
     "initialised": false,
-    "ref": null,
+    "ref": "v1.0.0",
     "head": null,
-    "date": null
+    "date": "2026-09-04"
   }
 }

@@ -1,0 +1,57 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+*.log
+
+# environment (there is no runtime .env; see .env.example)
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+
+# macOS
+.DS_Store
+
+# editor
+.idea/
+
+# cloudflare
+.wrangler/
+
+# playwright
+test-results/
+playwright-report/
+
+# Central Icons source mirror (pull into src/icons via scripts/add-icon.mjs)
+vendor/
+
+# local tooling, kept off the repo
+.claude/
+CLAUDE.local.md
+.cursor/
+.cursorrules
+.cursorignore
+.windsurf/
+.windsurfrules
+.codex/
+.gemini/
+GEMINI.md
+.kiro/
+.clinerules/
+.roo/
+.aider*
+.continue/
+.junie/
+.github/copilot-instructions.md
+.copilotignore
+.aiignore
+docs/research/
+
+# lighthouse ci
+.lighthouseci/

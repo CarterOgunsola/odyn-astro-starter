@@ -2,7 +2,7 @@
 
 A personal Astro starter for experiential sites. It is the code I keep from every project. The transition conductor, lazy engines, a markup-driven reveal system, one frame clock, SCSS tokens and type ladders, the SEO head, a Cloudflare Worker deploy, and the instruments I tune all of it with. It is not a design, a CMS or a framework.
 
-Born from Astro `minimal`. Read `docs/principles.md` before adding anything.
+Born from Astro `minimal`. Read `docs/principles.md` before adding anything. The starter itself runs at https://odyn-astro-starter.carterogunsola7589.workers.dev.
 
 ## From clone to deploy
 

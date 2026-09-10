@@ -1,7 +1,7 @@
 import { Frame, onDestroy, onResize } from "@odyn/lifecycle";
 import { Conductor } from "@odyn/conductor";
 import { gate } from "./gate";
-import { PlaneRegistry } from "./planes";
+import { PlaneRegistry, type PlaneMesh } from "./planes";
 import { TextureLoader } from "./textures";
 
 type Three = typeof import("three");
@@ -53,6 +53,29 @@ class _Gl {
       textures.current?.abort();
       textures.current?.dispose();
     });
+  }
+
+  /**
+   * An engine's own mesh on the stage, following `el` every frame. Resolves null when the stage is off, so the
+   * caller falls back to a 2D surface. The engine disposes what it made; detaching only removes it from the scene.
+   */
+  async attach(
+    el: HTMLElement,
+    make: (three: Three) => PlaneMesh,
+  ): Promise<{ mesh: PlaneMesh; detach: () => void } | null> {
+    if (this.state === "off") return null;
+    const three = await this.ensure();
+    if (!this.planes) return null;
+    const mesh = make(three);
+    const off = this.planes.attach(el, mesh);
+    this.resume();
+    return {
+      mesh,
+      detach: () => {
+        off();
+        if (this.planes && this.planes.size === 0) this.pause();
+      },
+    };
   }
 
   private ensure(): Promise<Three> {

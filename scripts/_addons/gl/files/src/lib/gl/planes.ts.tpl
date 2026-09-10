@@ -1,7 +1,8 @@
 import type * as THREE from "three";
 import type { TextureLoader } from "./textures";
 
-type Entry = { el: HTMLElement; mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial> };
+export type PlaneMesh = THREE.Mesh<THREE.BufferGeometry, THREE.Material>;
+type Entry = { el: HTMLElement; mesh: PlaneMesh; own: boolean };
 
 export class PlaneRegistry {
   private entries = new Map<string, Entry>();
@@ -34,10 +35,23 @@ export class PlaneRegistry {
       const material = new this.three.MeshBasicMaterial({ map, transparent: true });
       const mesh = new this.three.Mesh(this.geometry, material);
       this.scene.add(mesh);
-      this.entries.set(id, { el, mesh });
+      this.entries.set(id, { el, mesh, own: true });
       el.dataset.glReady = "";
     }
   }
+
+  /** An engine's own mesh, following `el` like a plane. The engine owns its material and geometry. */
+  attach(el: HTMLElement, mesh: PlaneMesh): () => void {
+    const key = `attached:${(this.attached += 1)}`;
+    this.scene.add(mesh);
+    this.entries.set(key, { el, mesh, own: false });
+    return () => {
+      if (!this.entries.has(key)) return;
+      this.scene.remove(mesh);
+      this.entries.delete(key);
+    };
+  }
+  private attached = 0;
 
   private srcOf(el: HTMLElement): string | null {
     if (el instanceof HTMLImageElement) return el.currentSrc || el.src;
@@ -62,9 +76,9 @@ export class PlaneRegistry {
   }
 
   dispose() {
-    for (const { el, mesh } of this.entries.values()) {
+    for (const { el, mesh, own } of this.entries.values()) {
       this.scene.remove(mesh);
-      mesh.material.dispose();
+      if (own) mesh.material.dispose();
       delete el.dataset.glReady;
     }
     this.entries.clear();

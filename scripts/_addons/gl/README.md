@@ -15,3 +15,8 @@ The files here carry a `.tpl` suffix so the starter itself never type-checks aga
 ## Proof
 
 Installed on a copy of the starter with the example plate marked `data-gl="plane" data-id="plate"` and the two hooks registered: `astro check` clean, the token check clean, three.js a separate 182 KB gzip chunk fetched only on the plane's page, `html[data-gl]` reads `on` there and `idle` after navigating to a page without planes, the marked image hidden only while its plane draws, and `?gl=off` leaving the DOM untouched. Write that check as the project's own e2e once a real page carries a plane.
+
+An engine that draws its own thing on the stage (a frame sequence, a shader) calls `Gl.attach(el, make)`: `make(three)`
+returns a mesh, the stage adds it and keeps it on `el`'s rect every frame like a plane, and the returned `detach()` removes
+it. The engine owns its material and geometry; the registry disposes only what it made. Resolves null when the stage is
+off, so the engine falls back to a 2D surface.

@@ -13,6 +13,7 @@ No long-term support branches. A project on an older tag reads `docs/migrations/
 ### Added
 
 - The telemetry strip: a row of chips fixed top left in development (time, fps, frame cost, memory, largest paint, viewport, GL state) with `Hud.watch(label, reader)` for an engine's own readings, Shift+H to hide, `?hud=off` to keep it away. It shares one outside clock with the perf probe (`packages/devkit/src/sampler.ts`).
+- `SITE.startAtTop` (default on): a hard load starts at the top instead of where the ClientRouter last saved the scroll. Back and forward between pages still restore.
 - The GL add-on's `Gl.attach(el, make)` and `PlaneRegistry.attach`: an engine's own mesh on the stage, following a DOM rect like a plane.
 
 ### Changed

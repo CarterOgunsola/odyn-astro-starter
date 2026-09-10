@@ -24,6 +24,8 @@ export const SITE = {
 
   // Base.astro, lib/theme.ts
   theme: "dark" as "system" | "light" | "dark",
+  // lib/scroll.ts: a hard load starts at the top instead of where the router last saved the scroll
+  startAtTop: true,
   // Seo.astro, the manifest
   themeColor: { light: "#f2f2f1", dark: "#141414" },
 

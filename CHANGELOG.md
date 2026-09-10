@@ -10,7 +10,13 @@ No long-term support branches. A project on an older tag reads `docs/migrations/
 
 ## [Unreleased]
 
+### Added
+
+- The telemetry strip: a row of chips fixed top left in development (time, fps, frame cost, memory, largest paint, viewport, GL state) with `Hud.watch(label, reader)` for an engine's own readings, Shift+H to hide, `?hud=off` to keep it away. It shares one outside clock with the perf probe (`packages/devkit/src/sampler.ts`).
+
 ### Changed
+
+- The tune panel is rebuilt: each dial is one row whose fill is the value, scrubbed relative to the value, typed on click, in collapsible groups with a find field; rows take `unit`, `hint` and toggles. SAVE, COPY (the diff), ALL and RESET in the head. The example engine's dials show the grouped form.
 
 - Renovate opens pull requests only. Nothing automerges; each update is landed by hand. Astro and TypeScript majors wait for dashboard approval.
 

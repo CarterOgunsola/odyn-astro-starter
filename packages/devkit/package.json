@@ -1,7 +1,7 @@
 {
   "name": "@odyn/devkit",
   "version": "0.1.0",
-  "description": "Development instruments, never shipped: a grid overlay that draws the site's own layout tokens, a tune panel behind ?tune=<name>, and a frame and long-task probe behind ?perf.",
+  "description": "Development instruments, never shipped: a grid overlay that draws the site's own layout tokens, a tune panel behind ?tune=<name>, a telemetry strip top left (Shift+H), and a frame and long-task probe behind ?perf.",
   "type": "module",
   "private": true,
   "exports": {

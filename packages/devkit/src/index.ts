@@ -73,82 +73,10 @@ class _DevGrid {
 }
 export const DevGrid = new _DevGrid();
 
-export type TuneRow = { key: string; label: string; min: number; max: number; step: number; value: number };
-
-export function tunePanel(
-  name: string,
-  rows: TuneRow[],
-  onChange: (board: Record<string, number>) => void,
-): (() => void) | null {
-  if (new URLSearchParams(location.search).get("tune") !== name) return null;
-  const board: Record<string, number> = {};
-  rows.forEach((r) => (board[r.key] = r.value));
-  const el = document.createElement("div");
-  el.setAttribute("data-lenis-prevent", "");
-  el.style.cssText =
-    "position:fixed;inset-block-end:16px;inset-inline-end:16px;z-index:3000;width:250px;max-height:70vh;overflow:auto;" +
-    "padding:12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);color:var(--ink);" +
-    "font:500 10px/1.4 ui-monospace,monospace;box-shadow:var(--shadow-modal)";
-  const head = document.createElement("div");
-  head.textContent = `${name.toUpperCase()} TUNE`;
-  head.style.cssText =
-    "display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:var(--ink-muted)";
-  const copy = document.createElement("button");
-  copy.textContent = "COPY";
-  copy.style.cssText =
-    "border:1px solid var(--line);background:var(--fill);color:var(--ink);border-radius:99px;padding:2px 8px;font:inherit;cursor:pointer";
-  copy.onclick = () => {
-    navigator.clipboard?.writeText(JSON.stringify(board, null, 2));
-    copy.textContent = "COPIED";
-    setTimeout(() => (copy.textContent = "COPY"), 900);
-  };
-  const save = document.createElement("button");
-  save.textContent = "SAVE";
-  save.style.cssText = copy.style.cssText + ";margin-inline-start:4px";
-  save.onclick = () => {
-    save.textContent = "…";
-    fetch(`/__tune/${name}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(board),
-    })
-      .then((r) => (save.textContent = r.ok ? "SAVED" : "FAILED"))
-      .catch(() => (save.textContent = "FAILED"))
-      .finally(() => setTimeout(() => (save.textContent = "SAVE"), 900));
-  };
-  const actions = document.createElement("span");
-  actions.append(copy, save);
-  head.append(actions);
-  el.append(head);
-  for (const row of rows) {
-    const wrap = document.createElement("label");
-    wrap.style.cssText = "display:block;margin-block:6px";
-    const cap = document.createElement("div");
-    cap.style.cssText = "display:flex;justify-content:space-between";
-    const label = document.createElement("span");
-    label.textContent = row.label;
-    const val = document.createElement("span");
-    val.style.color = "var(--ink-muted)";
-    val.textContent = String(row.value);
-    cap.append(label, val);
-    const range = document.createElement("input");
-    range.type = "range";
-    range.min = String(row.min);
-    range.max = String(row.max);
-    range.step = String(row.step);
-    range.value = String(row.value);
-    range.style.cssText = "width:100%;accent-color:var(--ink)";
-    range.oninput = () => {
-      board[row.key] = Number(range.value);
-      val.textContent = range.value;
-      onChange(board);
-    };
-    wrap.append(cap, range);
-    el.append(wrap);
-  }
-  document.body.append(el);
-  return () => el.remove();
-}
+export { tunePanel, tuneToggle, type TuneRow, type TuneGroup, type TuneOpts } from "./tune";
+export { Hud } from "./hud";
+import { Hud } from "./hud";
+import { sample } from "./sampler";
 
 const LONG_FRAME = 34;
 
@@ -168,11 +96,7 @@ class _Perf {
       ).observe({ entryTypes: ["longtask"] });
     } catch {}
     this.winT0 = performance.now();
-    let last = performance.now();
-    const frame = () => {
-      const now = performance.now();
-      const dt = now - last;
-      last = now;
+    sample((dt, now) => {
       this.frames++;
       if (dt > this.worst) this.worst = dt;
       if (dt > LONG_FRAME) console.log(`[perf] long frame ${dt.toFixed(1)}ms`);
@@ -183,9 +107,7 @@ class _Perf {
         this.worst = 0;
         this.winT0 = now;
       }
-      requestAnimationFrame(frame);
-    };
-    requestAnimationFrame(frame);
+    });
     console.log("[perf] armed");
   }
 }
@@ -194,4 +116,5 @@ export const Perf = new _Perf();
 export function mountDevkit(opts: { columns?: number } = {}) {
   DevGrid.init(opts);
   Perf.init();
+  Hud.init();
 }

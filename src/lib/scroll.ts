@@ -1,5 +1,6 @@
 import type Lenis from "lenis";
 import { Frame, onResize } from "@odyn/lifecycle";
+import { SITE } from "@/config/site";
 
 export type ScrollState = {
   scroll: number;
@@ -28,6 +29,14 @@ class _Scroll {
 
   init() {
     if (this.lenis || this.loading) return;
+    // The client router keeps the last position in history.state and restores it on every load, reloads
+    // included. Right for a document, wrong for a page that tells its story from the top (decision 037).
+    // Back and forward between pages still restore, since those are swaps, not loads.
+    if (SITE.startAtTop) {
+      const st = history.state as { scrollX?: number; scrollY?: number } | null;
+      if (st && (st.scrollX || st.scrollY)) history.replaceState({ ...st, scrollX: 0, scrollY: 0 }, "");
+      window.scrollTo(0, 0);
+    }
     const gen = ++this.generation;
     this.loading = import("lenis").then(({ default: LenisCtor }) => {
       this.loading = null;

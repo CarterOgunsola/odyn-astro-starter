@@ -46,7 +46,7 @@ astro dev status | logs | stop
 - **Custom elements** (`bun run new element <name>`): per-instance logic uses `connectedCallback` / `disconnectedCallback`. Import the file once from `app.ts` (`import "@/lib/elements/<name>"`) and use the tag in markup; find instances with `all()` or `byId()` from `@/lib/elements`.
 - **Engines** (`bun run new engine`): heavy modules load only on the page that carries their root, register `Conductor.hold()`, draw on `Frame.add()`, arrive on the `conductor:reveal` event.
 - **Entrances** are classes on markup (`z-y`, `z-s`, `z-o`, `z-x`, delay suffixes). Never write a bespoke entrance tween in a page module.
-- **One clock**: `Frame.add(fn, priority)` from `@odyn/lifecycle`. Never start a second `requestAnimationFrame` loop (the dev perf probe is the one exception, decision 016: it measures the clock from outside). One resize hub: `onResize({ read, write })`, never a ResizeObserver or window listener of your own.
+- **One clock**: `Frame.add(fn, priority)` from `@odyn/lifecycle`. Never start a second `requestAnimationFrame` loop (the devkit's sampler is the one exception, decision 016: the perf probe and the telemetry strip measure the clock from outside, on one shared loop). One resize hub: `onResize({ read, write })`, never a ResizeObserver or window listener of your own.
 
 ## Conventions
 

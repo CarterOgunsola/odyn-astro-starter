@@ -84,9 +84,44 @@ class _ExampleEngine {
         offTune = tunePanel(
           "example",
           [
-            { key: "speed", label: "speed", min: 0, max: 3, step: 0.05, value: board.speed },
-            { key: "amplitude", label: "amplitude", min: 0, max: 1, step: 0.01, value: board.amplitude },
-            { key: "lines", label: "lines", min: 1, max: 80, step: 1, value: board.lines },
+            {
+              group: "the ribbon",
+              rows: [
+                {
+                  key: "speed",
+                  label: "speed",
+                  min: 0,
+                  max: 3,
+                  step: 0.05,
+                  value: board.speed,
+                  unit: "x",
+                  hint: "how fast the waves travel",
+                },
+                {
+                  key: "amplitude",
+                  label: "amplitude",
+                  min: 0,
+                  max: 1,
+                  step: 0.01,
+                  value: board.amplitude,
+                  hint: "wave height as a share of the canvas",
+                },
+              ],
+            },
+            {
+              group: "the weave",
+              rows: [
+                {
+                  key: "lines",
+                  label: "lines",
+                  min: 1,
+                  max: 80,
+                  step: 1,
+                  value: board.lines,
+                  hint: "strands across the canvas",
+                },
+              ],
+            },
           ],
           (b) => Object.assign(board, b),
         );

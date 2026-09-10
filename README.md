@@ -39,7 +39,7 @@ The chassis alone (`src/`) is under three thousand lines of TypeScript, Astro an
 | Transitions | `packages/conductor` | guards, holds, honest cover, the `conductor:reveal` clock, safety rails, a plain wipe leg with the mark |
 | Lazy engines | `packages/engines` | load by root, prefetch at intent, swap token, the media hold and preloader |
 | Entrances | `packages/reveal` | `z-y`, `z-s`, `z-o`, `z-x` classes, resize-safe line split |
-| Instruments | `packages/devkit`, `src/tune` | grid overlay (Shift+G), tune panel (`?tune=`, SAVE writes `src/tune/<name>.json`, the engine's defaults), perf probe (`?perf`), development only |
+| Instruments | `packages/devkit`, `src/tune` | grid overlay (Shift+G), tune panel (`?tune=`, grouped pill sliders, SAVE writes `src/tune/<name>.json`, the engine's defaults), telemetry strip top left (Shift+H, `Hud.watch` for an engine's readings), perf probe (`?perf`), development only |
 | Foundations | `src/styles`, `src/config/easing.ts` | tokens, size scale, fluid clamp, radii, colour, type roles, layout, base elements, one easing table for CSS and GSAP |
 | Shell | `src/layouts/Base.astro`, `src/components` | fonts, theme, SEO head, header, footer, the panel |
 | Content | `src/content.config.ts` | one collection (the manual as notes), Sätteri Markdown, no plugins |

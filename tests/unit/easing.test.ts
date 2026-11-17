@@ -21,7 +21,7 @@ test("CSS and GSAP get the same curves", () => {
   expect(css("out-quad")).toBe("cubic-bezier(0.5, 1, 0.89, 1)");
   expect(easingCss()).toContain("--ease-in-out-quart:cubic-bezier(0.76, 0, 0.24, 1)");
   registerEases(gsap);
-  const fn = gsap.parseEase("house.in-out-quart") as (t: number) => number;
+  const fn = gsap.parseEase("house.in-out-quart");
   expect(typeof fn).toBe("function");
   expect(Math.abs(fn(0.5) - bezier(...EASES["in-out-quart"])(0.5))).toBeLessThan(1e-9);
 });

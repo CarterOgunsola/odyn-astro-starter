@@ -10,6 +10,6 @@ export function byId<T extends HTMLElement>(id: string): T | null {
 }
 
 export function all<T extends HTMLElement>(ctor: new () => T): T[] {
-  const tag = tags.get(ctor as unknown as CustomElementConstructor);
+  const tag = tags.get(ctor);
   return tag ? [...document.querySelectorAll<T>(tag)] : [];
 }

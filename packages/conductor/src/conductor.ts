@@ -149,7 +149,7 @@ class _Conductor {
     window.addEventListener(
       "popstate",
       (e) => {
-        this.uaSwipe = !!(e as PopStateEvent & { hasUAVisualTransition?: boolean }).hasUAVisualTransition;
+        this.uaSwipe = e.hasUAVisualTransition;
       },
       { capture: true },
     );
@@ -315,7 +315,7 @@ class _Conductor {
         : 1;
     if (this.state === "revealing" && this.tl) {
       const rt = this.tl as gsap.core.Timeline;
-      rt.getTweensOf(this.panel!).forEach((t) => t.kill());
+      rt.getTweensOf(this.panel).forEach((t) => t.kill());
       if (this.idleCall) rt.remove(this.idleCall);
     }
     this.tl = null;
@@ -497,7 +497,7 @@ class _Conductor {
     if (!this.dbg) return;
     const ms = (a: number, b: number) => (a && b && b >= a ? `${Math.round(b - a)}ms` : "-");
     const src = this.trigger.source;
-    const tag = src ? `<${src.tagName.toLowerCase()}${src.id ? "#" + src.id : ""}>` : "-";
+    const tag = src ? `<${src.tagName.toLowerCase()}${src.id ? `#${src.id}` : ""}>` : "-";
     this.dbg.textContent = [
       `state ${this.state}${this.inFlight ? " · in flight" : ""}`,
       `nav   ${this.trigger.type} via ${tag}`,

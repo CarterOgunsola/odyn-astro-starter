@@ -18,6 +18,8 @@ No long-term support branches. A project on an older tag reads `docs/migrations/
 
 ### Changed
 
+- oxlint with every rule the code passes replaces ESLint (decision 038); `bun check` typechecks the TypeScript and `astro check` stays for the templates (039). `bun run checks` runs the checks in parallel; `check` is now `typecheck` and `check:astro`. Bun 1.4.4.
+- CI runs checks, e2e and Lighthouse as parallel jobs. Pull requests run only the browser tests their change can reach, sharded by recorded time (040).
 - The tune panel is rebuilt: each dial is one row whose fill is the value, scrubbed relative to the value, typed on click, in collapsible groups with a find field; rows take `unit`, `hint` and toggles. SAVE, COPY (the diff), ALL and RESET in the head. The example engine's dials show the grouped form.
 
 - Renovate opens pull requests only. Nothing automerges; each update is landed by hand. Astro and TypeScript majors wait for dashboard approval.

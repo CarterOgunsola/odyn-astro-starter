@@ -1,0 +1,15 @@
+{
+  "conductor.spec.ts › the header rides above the curtain for the whole cover": 4558,
+  "conductor.spec.ts › a slow engine chunk holds the curtain and lands before the reveal": 8055,
+  "conductor.spec.ts › a click during the previous page's cascade tail lands both pages whole": 12382,
+  "conductor.spec.ts › the line splitter never wraps a line inside one mask": 1597,
+  "media.spec.ts › the reveal waits for a slow critical image": 3120,
+  "scroll.spec.ts › the scroll store follows the wheel": 708,
+  "small-screens.spec.ts › every control is reachable at 320": 1492,
+  "small-screens.spec.ts › every control is reachable at 390": 1538,
+  "small-screens.spec.ts › the first Tab is the skip link and it lands on main": 1495,
+  "smoke.spec.ts › home loads, conductor goes idle, no console errors": 1472,
+  "smoke.spec.ts › client navigation covers, swaps and reveals": 5088,
+  "smoke.spec.ts › 404 page serves": 365,
+  "theme.spec.ts › the toggle pins the theme and the chrome follows": 3895
+}

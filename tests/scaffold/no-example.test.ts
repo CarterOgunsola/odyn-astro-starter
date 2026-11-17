@@ -2,15 +2,14 @@ import { test, expect } from "bun:test";
 import { execSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join, resolve } from "node:path";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const root = resolve(import.meta.dirname, "../..");
 const stampRelease = (proj: string) => {
   const p = join(proj, "package.json");
   const pkg = JSON.parse(readFileSync(p, "utf8"));
   pkg.starter = { ...pkg.starter, ref: "v0.0.0-test", date: "2026-09-04" };
-  writeFileSync(p, JSON.stringify(pkg, null, 2) + "\n");
+  writeFileSync(p, `${JSON.stringify(pkg, null, 2)}\n`);
 };
 
 test("init --no-example leaves a project with no example and a green validate", () => {
@@ -33,7 +32,9 @@ test("init --no-example leaves a project with no example and a green validate", 
       }).toString();
     } catch (e) {
       const err = e as { stdout?: Buffer; stderr?: Buffer };
-      throw new Error(`${cmd} failed\n${err.stdout ?? ""}\n${err.stderr ?? ""}`);
+      throw new Error(`${cmd} failed\n${err.stdout?.toString() ?? ""}\n${err.stderr?.toString() ?? ""}`, {
+        cause: e,
+      });
     }
   };
   try {

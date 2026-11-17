@@ -73,7 +73,7 @@ class _Gl {
       mesh,
       detach: () => {
         off();
-        if (this.planes && this.planes.size === 0) this.pause();
+        if (this.planes?.size === 0) this.pause();
       },
     };
   }

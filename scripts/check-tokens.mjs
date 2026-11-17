@@ -61,7 +61,7 @@ const emitted = new Set(
 const usedRoles = new Set();
 for (const f of files.filter((f) => f.endsWith(".astro") || f.endsWith(".ts")))
   for (const line of readFileSync(f, "utf8").split("\n"))
-    if (/class/.test(line))
+    if (line.includes("class"))
       for (const m of line.matchAll(/(?<=["'`\s{])text-([a-z][a-z0-9-]*[a-z0-9])(?![a-z0-9-]|\s*:)/g))
         usedRoles.add(m[1]);
 const missingRoles = [...usedRoles].filter((r) => !emitted.has(r));

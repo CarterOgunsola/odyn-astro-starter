@@ -24,8 +24,8 @@ const refuse = (msg) => {
 const slug = (s) =>
   s
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
+    .replaceAll(/[^a-z0-9]+/g, "-")
+    .replaceAll(/^-+|-+$/g, "")
     .slice(0, 63);
 const rawName = process.env.PROJECT_NAME || basename(root);
 const name = slug(rawName);
@@ -36,7 +36,9 @@ if (process.env.PROJECT_NAME && name !== process.env.PROJECT_NAME)
 const pkgPath = resolve(root, "package.json");
 const pkg = JSON.parse(await readFile(pkgPath, "utf8"));
 
-if (!pkg.starter?.initialised) {
+if (pkg.starter?.initialised) {
+  console.log(`· already initialised from ${pkg.starter.ref ?? pkg.starter.head}`);
+} else {
   const inGit = !!git("rev-parse --is-inside-work-tree");
   const replaceHistory = inGit && !args.has("--keep-history");
 
@@ -77,7 +79,7 @@ if (!pkg.starter?.initialised) {
   pkg.name = name;
   pkg.version = "0.1.0";
   pkg.description = "";
-  await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+  await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
   console.log(
     `✓ package.json: name=${name}, starter stamp ${stamp.ref ?? ""}@${(stamp.head ?? "").slice(0, 7)}`,
   );
@@ -104,7 +106,7 @@ if (!pkg.starter?.initialised) {
     console.log(`✓ removed ${f}`);
   }
 
-  await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+  await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
   console.log(
     `✓ package.json: name=${name}, starter stamp ${stamp.ref ?? ""}@${(stamp.head ?? "").slice(0, 7)}`,
   );
@@ -126,14 +128,12 @@ if (!pkg.starter?.initialised) {
       await rm(old, { recursive: true, force: true });
       await rename(parked, old);
       pkg.starter.initialised = false;
-      await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+      await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
       refuse(
         `the first commit failed, so the starter history stays and init can be rerun.\n${e.stderr ?? e.message}`,
       );
     }
   }
-} else {
-  console.log(`· already initialised from ${pkg.starter.ref ?? pkg.starter.head}`);
 }
 
 if (args.has("--no-example") && !existsSync(resolve(root, "src/pages/example.astro"))) {
@@ -220,7 +220,7 @@ if (args.has("--handoff")) {
   const handoffPkg = JSON.parse(await readFile(pkgPath, "utf8"));
   delete handoffPkg.scripts["test:scaffold"];
   delete handoffPkg.scripts.icon;
-  await writeFile(pkgPath, JSON.stringify(handoffPkg, null, 2) + "\n");
+  await writeFile(pkgPath, `${JSON.stringify(handoffPkg, null, 2)}\n`);
   console.log("✓ package.json: scaffold and icon scripts removed");
   await rename(resolve(root, "PROD-README.md"), resolve(root, "README.md"));
   console.log("✓ README.md is the production README");

@@ -82,7 +82,7 @@ test("the line splitter never wraps a line inside one mask", async ({ page }) =>
     return {
       lines: ys.length,
       tallest: Math.max(...ys.map((y) => y.getBoundingClientRect().height)) / lh,
-      nbspIntact: ys.some((y) => y.textContent!.includes("Non breaking")),
+      nbspIntact: ys.some((y) => y.textContent.includes("Non breaking")),
     };
   });
   expect(report.lines).toBeGreaterThan(1);

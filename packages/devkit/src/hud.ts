@@ -65,7 +65,7 @@ class _Hud {
         hour12: false,
         timeZoneName: "short",
       });
-      return s.replace(/\s+/g, "");
+      return s.replaceAll(/\s+/g, "");
     });
     this.watch(
       "fps",
@@ -171,7 +171,7 @@ class _Hud {
   }
 
   private paintChip(c: Chip) {
-    let v: string | null = null;
+    let v: string | null;
     try {
       v = c.read();
     } catch {

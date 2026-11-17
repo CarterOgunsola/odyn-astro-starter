@@ -33,7 +33,7 @@ export function wipeLeg(o: WipeOptions = {}): Leg {
   const coverDur = o.coverDur ?? 0.8;
   const revealDur = o.revealDur ?? 0.9;
   const fastDur = o.fastDur ?? 0.7;
-  const bootDur = o.bootDur ?? 1.0;
+  const bootDur = o.bootDur ?? 1;
   const ease = o.ease ?? "expo.inOut";
   const markSel = o.mark === undefined ? "[data-conductor-mark]" : o.mark;
   let mark: HTMLElement | null = null;

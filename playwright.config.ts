@@ -6,7 +6,7 @@ export default defineConfig({
   expect: { timeout: 8_000 },
   fullyParallel: false,
   workers: 1,
-  reporter: [["list"]],
+  reporter: process.env.CI ? [["list"], ["json", { outputFile: "e2e-report.json" }]] : [["list"]],
   use: {
     baseURL: "http://localhost:4331",
     trace: "retain-on-failure",

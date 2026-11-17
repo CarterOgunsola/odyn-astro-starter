@@ -42,7 +42,7 @@ function tick(time: number) {
   const now = time * 1000;
   const dt = last ? Math.min(now - last, 100) : 16.7;
   last = now;
-  const snapshot = frameSubs.slice();
+  const snapshot = [...frameSubs];
   for (const s of snapshot) if (s.alive) s.fn(now, dt);
 }
 
@@ -59,7 +59,7 @@ export const Frame = {
     return () => {
       sub.alive = false;
       const i = frameSubs.indexOf(sub);
-      if (i >= 0) frameSubs.splice(i, 1);
+      if (i !== -1) frameSubs.splice(i, 1);
     };
   },
 };

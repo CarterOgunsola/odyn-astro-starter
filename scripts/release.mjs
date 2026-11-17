@@ -24,7 +24,7 @@ const pkgPath = resolve(root, "package.json");
 const pkg = JSON.parse(await readFile(pkgPath, "utf8"));
 pkg.version = version;
 pkg.starter = { ...pkg.starter, ref: tag, head: null, date: today };
-await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
 
 const clPath = resolve(root, "CHANGELOG.md");
 const cl = await readFile(clPath, "utf8");

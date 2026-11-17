@@ -22,7 +22,7 @@ export class LineSplit {
     });
     // Only while fonts still load: on a warm cache fonts.ready resolves inside the reveal dispatch and would drop the spans the tween holds.
     if (document.fonts && document.fonts.status !== "loaded") {
-      document.fonts.ready.then(() => this.resplitWhenSettled());
+      void document.fonts.ready.then(() => this.resplitWhenSettled());
     }
   }
 
@@ -46,7 +46,7 @@ export class LineSplit {
       this.split();
       return;
     }
-    Promise.all(active.map((t) => t.then())).then(() => {
+    void Promise.all(active.map((t) => t.then(() => null))).then(() => {
       if (this.el.isConnected) this.split();
     });
   }
@@ -65,9 +65,9 @@ export class LineSplit {
     const el = this.el;
     const src = document.createElement("div");
     src.innerHTML = this.original;
-    const esc = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const EL = "\u0001";
-    const BR = "\u0002";
+    const esc = (t: string) => t.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    const EL = "\uE000";
+    const BR = "\uE001";
     const els: HTMLElement[] = [];
     let flat = "";
     src.childNodes.forEach((n) => {
@@ -100,9 +100,9 @@ export class LineSplit {
 
     const words: string[] = [];
     for (const t of tokens) {
-      const m = t.match(/^([^\u0001]*)\u0001(\d+)\u0001([^\u0001]*)$/);
+      const m = t.match(/^([^\uE000]*)\uE000(\d+)\uE000([^\uE000]*)$/);
       if (!m) {
-        words.push(t.replace(/\u0001(\d+)\u0001/g, (mm, i) => els[+i]?.outerHTML ?? mm));
+        words.push(t.replaceAll(/\uE000(\d+)\uE000/g, (mm, i) => els[+i]?.outerHTML ?? mm));
         continue;
       }
       const [, before, idx, after] = m;

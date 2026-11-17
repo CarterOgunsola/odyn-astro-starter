@@ -62,7 +62,7 @@ class _DevGrid {
 
   private set(mode: number) {
     this.mode = mode;
-    if (!mode) return void this.el?.remove();
+    if (!mode) return this.el?.remove();
     if (!this.el) this.el = this.build();
     if (!this.el.isConnected) document.body.append(this.el);
     this.track!.style.display = mode === 3 ? "none" : "grid";

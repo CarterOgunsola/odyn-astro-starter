@@ -26,7 +26,7 @@ export function parseTune(name, raw) {
     if (typeof v !== "number" || !Number.isFinite(v))
       return { ok: false, status: 400, error: `${k} is not a finite number` };
   }
-  return { ok: true, text: JSON.stringify(body, null, 2) + "\n" };
+  return { ok: true, text: `${JSON.stringify(body, null, 2)}\n` };
 }
 
 export async function handleTune(name, raw, write, root = process.cwd()) {

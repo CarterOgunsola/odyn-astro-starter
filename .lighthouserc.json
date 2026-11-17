@@ -14,7 +14,8 @@
         "categories:seo": ["error", { "minScore": 0.9 }],
         "unused-javascript": ["warn", { "maxNumericValue": 200 }],
         "network-dependency-tree-insight": "off",
-        "uses-rel-preconnect": "off"
+        "uses-rel-preconnect": "off",
+        "forced-reflow-insight": ["warn", { "minScore": 0.9 }]
       }
     }
   }

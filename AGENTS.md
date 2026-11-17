@@ -12,7 +12,8 @@ A personal Astro starter for experiential sites. Static output, vanilla TypeScri
 bun install                 # no account, no key needed
 bun run dev                 # http://localhost:4321
 bun run dev:worker          # the /api/* Worker on :8787 (dev proxies to it)
-bun run validate            # typecheck + lint + format + tokens + unit tests + build + e2e: must be green
+bun run validate            # checks (typecheck, lint, format, tokens, unit, in parallel) + build + e2e: must be green
+bun run checks              # the checks alone, about five seconds
 bun run format              # rewrite what format:check complains about
 bun run test                # the Playwright suite alone, against the built site
 ```

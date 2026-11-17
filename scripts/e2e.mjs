@@ -11,8 +11,8 @@ const candidates =
     ],
     linux: ["google-chrome", "google-chrome-stable", "chrome"],
     win32: [
-      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+      String.raw`C:\Program Files\Google\Chrome\Application\chrome.exe`,
+      String.raw`C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`,
       `${process.env.LOCALAPPDATA ?? ""}\\Google\\Chrome\\Application\\chrome.exe`,
     ],
   }[process.platform] ?? [];

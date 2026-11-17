@@ -36,7 +36,10 @@ test("handleTune writes to src/tune/<name>.json under the root and reports 204",
   const r = await handleTune(
     "hero",
     '{"x":1}',
-    async (p: string, t: string) => void writes.push([p, t]),
+    (p: string, t: string) => {
+      writes.push([p, t]);
+      return Promise.resolve();
+    },
     "/proj",
   );
   expect(r.status).toBe(204);

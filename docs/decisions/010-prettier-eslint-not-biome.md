@@ -2,7 +2,7 @@
 
 Date: 2026-09-03
 
-Status: accepted
+Status: superseded by 038 (linting); Prettier stands
 
 ## Context
 

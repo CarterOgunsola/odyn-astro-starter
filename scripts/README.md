@@ -6,7 +6,10 @@ House tooling. Plain Node scripts with no dependencies of their own; `init --no-
 - `new.mjs`: the generator. `bun run new module <name>`, `new element <name>` and `new engine <name>` write the house shape from `_templates/`, and an engine gets registered in `src/lib/engines.ts`. Templates live here so they get reviewed with the code.
 - `add-icon.mjs`: pulls named icons from a local Central Icons mirror into `src/icons`, normalising fills to `currentColor`.
 - `add.mjs`: installs an add-on (`bun run add gl`) from `_addons/`, with its dependency pinned and its decision record written.
+- `checks.mjs`: typecheck, `astro check`, lint, format, tokens and unit tests in parallel; prints each step's time and the output of what failed.
 - `e2e.mjs`: the Playwright suite inside validate, behind a check for Google Chrome.
+- `e2e-plan.mjs`: picks the tests a change can reach and splits them into CI shards by recorded time. `bun run test:plan -- --files src/pages/404.astro` shows the plan for a change (decision 040).
+- `e2e-timings.mjs`: turns a Playwright JSON report into the `{ test: ms }` map the planner reads.
 - `check-tokens.mjs`: every custom property referenced is declared and every declared one is used; every `.text-*` role used is emitted.
 - `vite-tune.mjs`: the serve-only middleware the tune panel's SAVE posts to.
 - `_util.mjs`: the one kebab and Pascal helper the generators share.

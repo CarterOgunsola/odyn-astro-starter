@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  validate:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -27,19 +27,100 @@ jobs:
         with:
           bun-version-file: .bun-version
       - run: bun install --frozen-lockfile
-      - run: bunx playwright install --with-deps chrome
-      - run: bun run validate
-      - name: Lighthouse
-        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2
+      - run: bun run checks
+
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      count: ${{ steps.plan.outputs.count }}
+      site: ${{ steps.plan.outputs.site }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - name: Recorded test times
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for id in $(gh run list -R "$GITHUB_REPOSITORY" -w ci.yml -b main -e push -L 6 --json databaseId --jq '.[].databaseId'); do
+            gh run download "$id" -R "$GITHUB_REPOSITORY" -p 'e2e-timings-*' -D "$RUNNER_TEMP/timings" 2>/dev/null && break
+          done
+          true
+      - id: plan
+        run: >-
+          node scripts/e2e-plan.mjs
+          --timings tests/e2e/timings.json
+          --timings-dir "$RUNNER_TEMP/timings"
+          ${{ github.event_name == 'pull_request' && '--changed-from HEAD^1' || '' }}
+
+  e2e:
+    needs: plan
+    if: needs.plan.outputs.count != '0'
+    name: e2e ${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - name: Test
+        env:
+          LIST: ${{ matrix.list }}
+        run: |
+          printf '%s\n' "$LIST" > "$RUNNER_TEMP/tests.txt"
+          bunx playwright test --test-list "$RUNNER_TEMP/tests.txt"
+      - if: always() && github.event_name == 'push'
+        run: node scripts/e2e-timings.mjs e2e-report.json > e2e-timings.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always() && github.event_name == 'push'
+        with:
+          name: e2e-timings-${{ matrix.shard }}
+          path: e2e-timings.json
+          retention-days: 30
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: test-results-${{ matrix.shard }}
+          path: test-results
+
+  lighthouse:
+    needs: plan
+    if: needs.plan.outputs.site == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2
         with:
           configPath: ./.lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: false
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: failure()
-        with:
-          name: test-results
-          path: test-results
 
   scaffold:
     runs-on: ubuntu-latest

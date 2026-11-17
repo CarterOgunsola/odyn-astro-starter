@@ -14,7 +14,7 @@ const key = (s) =>
     .replace(/\.svg$/i, "")
     .replace(/^icon/i, "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "");
+    .replaceAll(/[^a-z0-9]+/g, "");
 
 async function index() {
   const map = new Map();
@@ -37,7 +37,7 @@ async function index() {
 }
 
 function normalize(svg) {
-  return svg.replace(/(stroke|fill)="(black|#000000|#000|#1e1e1e)"/gi, '$1="currentColor"').trim();
+  return svg.replaceAll(/(stroke|fill)="(black|#000000|#000|#1e1e1e)"/gi, '$1="currentColor"').trim();
 }
 
 const args = process.argv.slice(2);
@@ -74,6 +74,6 @@ for (const arg of args) {
     continue;
   }
   const svg = normalize(await readFile(hit.path, "utf8"));
-  await writeFile(join(OUT, `${hit.name}.svg`), svg + "\n");
+  await writeFile(join(OUT, `${hit.name}.svg`), `${svg}\n`);
   console.log(`✓ ${hit.name}  ←  ${hit.category}`);
 }

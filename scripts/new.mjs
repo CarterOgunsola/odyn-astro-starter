@@ -40,7 +40,7 @@ const tpl = await readFile(resolve(root, `scripts/_templates/${kind}.ts.tpl`), "
 if (kind === "element") await mkdir(resolve(root, "src/lib/elements"), { recursive: true });
 await writeFile(out, fill(tpl));
 const written = [out];
-console.log(`✓ ${out.replace(root + "/", "")}`);
+console.log(`✓ ${out.replace(`${root}/`, "")}`);
 
 if (kind === "engine") {
   const reg = resolve(root, "src/lib/engines.ts");

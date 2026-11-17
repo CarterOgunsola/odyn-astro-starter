@@ -126,7 +126,7 @@ function injectStyle() {
   const el = document.createElement("style");
   el.id = STYLE_ID;
   el.textContent = CSS;
-  document.head.appendChild(el);
+  document.head.append(el);
 }
 
 const isGrouped = (rows: TuneRow[] | TuneGroup[]): rows is TuneGroup[] =>
@@ -229,11 +229,11 @@ export function tunePanel(
     const keys = moved();
     const out: Record<string, number> = {};
     for (const k of keys.length ? keys : Object.keys(board)) out[k] = board[k];
-    navigator.clipboard?.writeText(JSON.stringify(out, null, 2));
+    void navigator.clipboard?.writeText(JSON.stringify(out, null, 2));
     flash(copyBtn, keys.length ? `copied ${keys.length}` : "copied all");
   });
   const allBtn = btn("all", "copy the whole board", () => {
-    navigator.clipboard?.writeText(JSON.stringify(board, null, 2));
+    void navigator.clipboard?.writeText(JSON.stringify(board, null, 2));
     flash(allBtn, "copied");
   });
   const resetBtn = btn("reset", "every dial back to its baked value", () => {

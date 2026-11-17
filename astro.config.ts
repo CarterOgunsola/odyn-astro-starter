@@ -51,7 +51,7 @@ export default defineConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          loadPaths: [fileURLToPath(new URL("./src/styles", import.meta.url))],
+          loadPaths: [fileURLToPath(new URL("src/styles", import.meta.url))],
         },
       },
     },

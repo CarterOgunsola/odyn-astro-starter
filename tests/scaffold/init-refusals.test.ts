@@ -3,9 +3,8 @@ import { execSync, spawnSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, cpSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const root = resolve(import.meta.dirname, "../..");
 
 type Case = {
   name: string;
@@ -24,7 +23,7 @@ const make = (project: string, identity = true) => {
   // A copy has no tags: give it the release stamp a real release writes.
   const pkg = JSON.parse(readFileSync(join(proj, "package.json"), "utf8"));
   pkg.starter = { ...pkg.starter, ref: "v0.0.0-test", date: "2026-09-04" };
-  writeFileSync(join(proj, "package.json"), JSON.stringify(pkg, null, 2) + "\n");
+  writeFileSync(join(proj, "package.json"), `${JSON.stringify(pkg, null, 2)}\n`);
   const sh = (cmd: string) => execSync(cmd, { cwd: proj, stdio: "ignore" });
   sh("git init -q");
   if (identity) sh("git config user.name test && git config user.email test@example.com");
@@ -89,7 +88,7 @@ test("init refuses without a release stamp or a tag to record", () => {
     const p = join(proj, "package.json");
     const pkg = JSON.parse(readFileSync(p, "utf8"));
     pkg.starter = { ...pkg.starter, ref: null, date: null };
-    writeFileSync(p, JSON.stringify(pkg, null, 2) + "\n");
+    writeFileSync(p, `${JSON.stringify(pkg, null, 2)}\n`);
     execSync("git add -A && git commit -q -m unstamped", { cwd: proj });
     const r = spawnSync("node", ["scripts/init.mjs"], { cwd: proj, env: process.env, encoding: "utf8" });
     expect(r.status).toBe(1);

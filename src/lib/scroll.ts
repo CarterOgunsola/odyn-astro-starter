@@ -83,7 +83,7 @@ class _Scroll {
     s.scroll = l.scroll;
     s.limit = l.limit;
     s.velocity = l.velocity;
-    s.direction = l.velocity === 0 ? 0 : (l.direction as ScrollState["direction"]);
+    s.direction = l.velocity === 0 ? 0 : l.direction;
     s.progress = l.progress;
     this.listeners.forEach((fn) => fn(s));
     if (this.readout) this.print();
@@ -120,7 +120,7 @@ class _Scroll {
     if (this.lenis) {
       const cl = document.documentElement.classList;
       cl.add("lenis");
-      cl.toggle("lenis-stopped", !!this.lenis.isStopped);
+      cl.toggle("lenis-stopped", this.lenis.isStopped);
     }
   }
 
@@ -129,7 +129,7 @@ class _Scroll {
   }
 
   stop(): symbol {
-    const token = Symbol();
+    const token = Symbol("scroll hold");
     this.holders.add(token);
     this.lenis?.stop();
     return token;

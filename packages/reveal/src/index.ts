@@ -15,7 +15,7 @@ export type RevealTiming = {
 
 const timing: RevealTiming = {
   y: { duration: 1.2, ease: "expo.out" },
-  o: { duration: 1.0, ease: "power2.out" },
+  o: { duration: 1, ease: "power2.out" },
   x: { duration: 1.4, ease: "expo.out" },
   stagger: 0.1,
   anchor: 0.5,

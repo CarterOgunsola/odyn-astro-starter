@@ -18,4 +18,4 @@ A project never depends on the starter at runtime and never merges from it autom
 
 ## Amended 2026-09-04
 
-`init --handoff` keeps `.github/workflows/ci.yml`. Workflows could count as personal tooling, but the workflow here is the project's own pipeline (install, validate, Lighthouse) and the client inherits it with the repository. What leaves at handover is the agent files, the upstream notes and Renovate.
+`init --handoff` keeps `.github/workflows/ci.yml`. Workflows could count as personal tooling, but the workflow here is the project's own pipeline (checks, browser tests, Lighthouse) and the client inherits it with the repository. What leaves at handover is the agent files, the upstream notes and Renovate.

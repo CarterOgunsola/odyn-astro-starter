@@ -6,6 +6,8 @@ Three kinds of test, each in its own folder.
 
 `unit/` is `bun test`, inside validate, for pure logic: the frame clock, the easing table, the preloader, the tune middleware's parser.
 
-`scaffold/` is `bun test` on copies of the tree in a scratch directory: `init --no-example` then a full validate, `init --handoff` then validate, `add gl` then check and lint, and the five refusal cases of `init`. Slow, so it has its own script and CI job.
+`scaffold/` is `bun test` on copies of the tree in a scratch directory: `init --no-example` then a full validate, `init --handoff` then validate, `add gl` then typecheck, `astro check` and lint, and the five refusal cases of `init`. Slow, so it has its own script and CI job.
+
+`e2e/timings.json` seeds the CI shard plan with each test's time in ms; `main` runs record fresher times as artifacts (decision 040).
 
 Run them with `bun run build && bun run test`, `bun run test:unit` and `bun run test:scaffold`. Add a test here when a chassis contract changes shape. Page-level behaviour of a real site belongs in that site's own suite.

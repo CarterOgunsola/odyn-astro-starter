@@ -55,3 +55,4 @@ docs/research/
 
 # lighthouse ci
 .lighthouseci/
+e2e-report.json

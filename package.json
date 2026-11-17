@@ -55,7 +55,7 @@
     "@playwright/test": "1.63.0",
     "oxlint": "1.94.0",
     "oxlint-tsgolint": "7.0.2007",
-    "prettier": "3.9.6",
+    "prettier": "3.10.1",
     "prettier-plugin-astro": "0.14.1",
     "typescript": "6.0.3",
     "wrangler": "4.130.0"

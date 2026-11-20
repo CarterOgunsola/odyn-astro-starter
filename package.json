@@ -58,7 +58,7 @@
     "prettier": "3.9.6",
     "prettier-plugin-astro": "0.14.1",
     "typescript": "6.0.3",
-    "wrangler": "4.130.0"
+    "wrangler": "4.164.0"
   },
   "starter": {
     "name": "odyn-astro-starter",
